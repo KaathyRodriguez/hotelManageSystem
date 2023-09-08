@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hotelmanagesystem.mapper.CustomerMapper">
+
+    <resultMap id="pageCustomer" type="com.example.hotelmanagesystem.entity.Customer">
+        <result column="memberNo" property="memberNo" />
+        <result column="memberCardID" property="memberCardID" />
+        <result column="memberName" property="memberName" />
+        <result column="memberSex" property="memberSex" />
+        <result column="memberLevel" property="memberLevel" />
+        <result column="memberPoint" property="memberPoint" />
+        <result column="memberTelephone" property="memberTelephone" />
+
+    </resultMap>
+
+    <select id="findPage" resultMap="pageCustomer">
+        select * from Customer
+        <where>
+            <if test="memberNo != null and memberNo != ''">
+                and Customer.memberNo like concat('%', #{memberNo} ,'%')
+            </if>
+            <if test="memberName != null and memberName != ''">
+                and Customer.memberName like concat('%', #{memberName} ,'%')
+            </if>
+            <if test="memberSex != null and memberSex != ''">
+                and Customer.memberSex like concat('%', #{memberSex} ,'%')
+            </if>
+        </where>
+    </select>
+
+    <delete id="removeByMemberNo">
+        delete from Customer where memberNo = #{memberNo}
+    </delete>
+
+    <delete id="removeByMemberNos">
+        DELETE FROM Customer
+        <where>
+            <if test="memberNos!=null and memberNos.size>0">
+                <foreach item="memberNo" collection="memberNos" open="memberNo in(" separator="," close=")">
+                    #{memberNo}
+                </foreach>
+            </if>
+        </where>
+    </delete>
+
+</mapper>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hotelmanagesystem.mapper.CateringorderformMapper">
+
+    <resultMap id="pageCateringOrderForm" type="com.example.hotelmanagesystem.entity.Cateringorderform">
+        <result column="orderNo" property="orderNo" />
+        <result column="memberNo" property="memberNo" />
+        <result column="purchaseDate" property="purchaseDate" />
+        <result column="orderType" property="orderType" />
+        <result column="orderDeposit" property="orderDeposit" />
+        <result column="orderDescription" property="orderDescription" />
+        <result column="orderStatus" property="orderStatus" />
+        <result column="note" property="note" />
+
+    </resultMap>
+
+    <delete id="removeByOrderNo">
+        delete from Cateringorderform where orderNo = #{orderNo}
+    </delete>
+
+    <delete id="removeByOrderNos">
+        DELETE FROM Cateringorderform
+        <where>
+            <if test="orderNos!=null and orderNos.size>0">
+                <foreach item="orderNo" collection="orderNos" open="orderNo in(" separator="," close=")">
+                    #{orderNo}
+                </foreach>
+            </if>
+        </where>
+    </delete>
+
+    <select id="findPage" resultMap="pageCateringOrderForm">
+        select * from Cateringorderform
+        <where>
+            <if test="orderNo != null and orderNo != ''">
+                and Cateringorderform.orderNo like concat('%', #{orderNo} ,'%')
+            </if>
+            <if test="purchaseDate != null and purchaseDate != ''">
+                and Cateringorderform.purchaseDate like concat('%', #{purchaseDate} ,'%')
+            </if>
+            <if test="orderType != null and orderType != ''">
+                and Cateringorderform.orderType like concat('%', #{orderType} ,'%')
+            </if>
+        </where>
+    </select>
+
+</mapper>

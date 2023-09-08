@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hotelmanagesystem.mapper.RoomMapper">
+
+    <resultMap id="pageRoom" type="com.example.hotelmanagesystem.entity.Room">
+        <result column="roomNo" property="roomNo" />
+        <result column="roomType" property="roomType" />
+        <result column="roomStatus" property="roomStatus" />
+        <result column="roomPrice" property="roomPrice" />
+        <result column="roomPosition" property="roomPosition" />
+    </resultMap>
+
+    <delete id="removeByRoomNo">
+        delete from Room where roomNo = #{roomNo}
+    </delete>
+
+    <delete id="removeByRoomNos">
+        DELETE FROM Room
+        <where>
+            <if test="roomNos!=null and roomNos.size>0">
+                <foreach item="roomNo" collection="roomNos" open="roomNo in(" separator="," close=")">
+                    #{roomNo}
+                </foreach>
+            </if>
+        </where>
+    </delete>
+
+    <select id="findPage" resultMap="pageRoom">
+        select * from Room
+        <where>
+            <if test="roomNo != null and roomNo != ''">
+                and room.roomNo like concat('%', #{roomNo} ,'%')
+            </if>
+            <if test="roomType != null and roomType != ''">
+                and room.roomType like concat('%', #{roomType} ,'%')
+            </if>
+            <if test="roomStatus != null and roomStatus != ''">
+                and room.roomStatus like concat('%', #{roomStatus} ,'%')
+            </if>
+        </where>
+    </select>
+
+</mapper>

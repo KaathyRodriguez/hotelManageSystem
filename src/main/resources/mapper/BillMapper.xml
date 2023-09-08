@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hotelmanagesystem.mapper.BillMapper">
+
+    <resultMap id="pageBill" type="com.example.hotelmanagesystem.entity.Bill">
+        <result column="billNo" property="billNo" />
+        <result column="roomNo" property="roomNo" />
+        <result column="memberNo" property="memberNo" />
+        <result column="consumeAmount" property="consumeAmount" />
+        <result column="billTime" property="billTime" />
+        <result column="billStatus" property="billStatus" />
+    </resultMap>
+
+    <select id="findPage" resultMap="pageBill">
+        select * from Bill
+        <where>
+            <if test="billNo != null and billNo != ''">
+                and Bill.billNo like concat('%', #{billNo} ,'%')
+            </if>
+            <if test="billTime != null and billTime != ''">
+                and Bill.billTime like concat('%', #{billTime} ,'%')
+            </if>
+            <if test="billStatus != null and billStatus != ''">
+                and Bill.billStatus like concat('%', #{billStatus} ,'%')
+            </if>
+        </where>
+    </select>
+
+    <delete id="removeByBillNo">
+        delete from Bill where billNo = #{billNo}
+    </delete>
+
+    <delete id="removeByBillNos">
+        DELETE FROM Bill
+        <where>
+            <if test="billNos!=null and billNos.size>0">
+                <foreach item="billNo" collection="billNos" open="billNo in(" separator="," close=")">
+                    #{billNo}
+                </foreach>
+            </if>
+        </where>
+    </delete>
+
+</mapper>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hotelmanagesystem.mapper.WarehouseMapper">
+
+    <resultMap id="pageWarehouse" type="com.example.hotelmanagesystem.entity.Warehouse">
+        <result column="warehouseNo" property="warehouseNo" />
+        <result column="warehouseName" property="warehouseName" />
+        <result column="warehouseManager" property="warehouseManager" />
+        <result column="warehousePlace" property="warehousePlace" />
+        <result column="storeGoodsList" property="storeGoodsList" />
+        <result column="warehouseState" property="warehouseState" />
+        <result column="warehouseSafeLevel" property="warehouseSafeLevel" />
+    </resultMap>
+
+    <delete id="removeByWarehouseNo">
+        delete from Warehouse where warehouseNo = #{warehouseNo}
+    </delete>
+
+    <delete id="removeByWarehouseNos">
+        DELETE FROM Warehouse
+        <where>
+            <if test="warehouseNos!=null and warehouseNos.size>0">
+                <foreach item="warehouseNo" collection="warehouseNos" open="warehouseNo in(" separator="," close=")">
+                    #{warehouseNo}
+                </foreach>
+            </if>
+        </where>
+    </delete>
+
+    <select id="findPage" resultMap="pageWarehouse">
+        select * from Warehouse
+        <where>
+            <if test="warehouseNo != null and warehouseNo != ''">
+                and Warehouse.warehouseNo like concat('%', #{warehouseNo} ,'%')
+            </if>
+            <if test="warehouseName != null and warehouseName != ''">
+                and Warehouse.warehouseName like concat('%', #{warehouseName} ,'%')
+            </if>
+            <if test="warehouseManager != null and warehouseManager != ''">
+                and Warehouse.warehouseManager like concat('%', #{warehouseManager} ,'%')
+            </if>
+        </where>
+    </select>
+
+</mapper>

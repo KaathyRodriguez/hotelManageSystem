@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hotelmanagesystem.mapper.RoomorderformMapper">
+
+    <resultMap id="pageRoomorderform" type="com.example.hotelmanagesystem.entity.Roomorderform">
+        <result column="orderID" property="orderID" />
+        <result column="orderTime" property="orderTime" />
+        <result column="memberName" property="memberName" />
+        <result column="memberCardID" property="memberCardID" />
+        <result column="orderRoomNo" property="orderRoomNo" />
+        <result column="orderRoomType" property="orderRoomType" />
+        <result column="orderComingTime" property="orderComingTime" />
+        <result column="orderAmount" property="orderAmount" />
+        <result column="orderStatus" property="orderStatus" />
+
+    </resultMap>
+
+    <delete id="removeByOrderID">
+        delete from RoomOrderform where orderID = #{orderID}
+    </delete>
+
+    <delete id="removeByOrderIDs">
+        DELETE FROM Roomorderform
+        <where>
+            <if test="orderIDs!=null and orderIDs.size>0">
+                <foreach item="orderID" collection="orderIDs" open="orderID in(" separator="," close=")">
+                    #{orderID}
+                </foreach>
+            </if>
+        </where>
+    </delete>
+
+    <select id="findPage" resultMap="pageRoomorderform">
+        select * from Roomorderform
+        <where>
+            <if test="orderID != null and orderID != ''">
+                and Roomorderform.orderID like concat('%', #{orderID} ,'%')
+            </if>
+            <if test="memberName != null and memberName != ''">
+                and Roomorderform.memberName like concat('%', #{memberName} ,'%')
+            </if>
+            <if test="orderStatus != null and orderStatus != ''">
+                and Roomorderform.orderStatus like concat('%', #{orderStatus} ,'%')
+            </if>
+        </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hotelmanagesystem.mapper.GoodsMapper">
+
+    <resultMap id="pageGoods" type="com.example.hotelmanagesystem.entity.Goods">
+        <result column="goodsNo" property="goodsNo" />
+        <result column="goodsName" property="goodsName" />
+        <result column="goodsType" property="goodsType" />
+        <result column="goodsNum" property="goodsNum" />
+        <result column="goodsCost" property="goodsCost" />
+        <result column="goodsLimit" property="goodsLimit" />
+    </resultMap>
+
+    <select id="findPage" resultMap="pageGoods">
+        select * from Goods
+        <where>
+            <if test="goodsNo != null and goodsNo != ''">
+                and Goods.goodsNo like concat('%', #{goodsNo} ,'%')
+            </if>
+            <if test="goodsName != null and goodsName != ''">
+                and Goods.goodsName like concat('%', #{goodsName} ,'%')
+            </if>
+            <if test="goodsType != null and goodsType != ''">
+                and Goods.goodsType like concat('%', #{goodsType} ,'%')
+            </if>
+        </where>
+    </select>
+
+    <delete id="removeByGoodsNo">
+        delete from Goods where goodsNo = #{goodsNo}
+    </delete>
+
+    <delete id="removeByGoodsNos">
+        DELETE FROM Goods
+        <where>
+            <if test="goodsNos!=null and goodsNos.size>0">
+                <foreach item="goodsNo" collection="goodsNos" open="goodsNo in(" separator="," close=")">
+                    #{goodsNo}
+                </foreach>
+            </if>
+        </where>
+    </delete>
+
+</mapper>

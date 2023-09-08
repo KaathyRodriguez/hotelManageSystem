@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hotelmanagesystem.mapper.SalaryMapper">
+
+    <resultMap id="pageSalary" type="com.example.hotelmanagesystem.entity.Salary">
+        <result column="salaryNo" property="salaryNo" />
+        <result column="empNo" property="empNo" />
+        <result column="baseSalary" property="baseSalary" />
+        <result column="performanceSalary" property="performanceSalary" />
+        <result column="deductSalary" property="deductSalary" />
+        <result column="bonus" property="bonus" />
+    </resultMap>
+
+    <select id="findPage" resultMap="pageSalary">
+        select * from Salary
+        <where>
+            <if test="salaryNo != null and salaryNo != ''">
+                and Salary.salaryNo like concat('%', #{salaryNo} ,'%')
+            </if>
+            <if test="empNo != null and empNo != ''">
+                and Salary.empNo like concat('%', #{empNo} ,'%')
+            </if>
+        </where>
+    </select>
+
+    <delete id="removeBySalaryNo">
+        delete from Salary where salaryNo = #{salaryNo}
+    </delete>
+
+    <delete id="removeBySalaryNos">
+        DELETE FROM Salary
+        <where>
+            <if test="salaryNos!=null and salaryNos.size>0">
+                <foreach item="salaryNo" collection="salaryNos" open="salaryNo in(" separator="," close=")">
+                    #{salaryNo}
+                </foreach>
+            </if>
+        </where>
+    </delete>
+
+    <insert id="add" statementType="CALLABLE">
+        { CALL Increase_Salary() }
+    </insert>
+
+</mapper>

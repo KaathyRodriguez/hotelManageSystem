@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hotelmanagesystem.mapper.SupplyformMapper">
+
+    <resultMap id="pageSupplyForm" type="com.example.hotelmanagesystem.entity.Supplyform">
+        <result column="supplyFormNo" property="supplyFormNo" />
+        <result column="goodsNo" property="goodsNo" />
+        <result column="purchaseDate" property="purchaseDate" />
+        <result column="purchaseManager" property="purchaseManager" />
+        <result column="purchaseAmount" property="purchaseAmount" />
+        <result column="purchasePrice" property="purchasePrice" />
+
+    </resultMap>
+
+    <delete id="removeBySupplyFormNo">
+        delete from Supplyform where supplyFormNo = #{supplyFormNo}
+    </delete>
+
+    <delete id="removeBySupplyFormNos">
+        DELETE FROM Supplyform
+        <where>
+            <if test="supplyFormNos!=null and supplyFormNos.size>0">
+                <foreach item="supplyFormNo" collection="supplyFormNos" open="supplyFormNo in(" separator="," close=")">
+                    #{supplyFormNo}
+                </foreach>
+            </if>
+        </where>
+    </delete>
+
+    <select id="findPage" resultMap="pageSupplyForm">
+        select * from Supplyform
+        <where>
+            <if test="supplyFormNo != null and supplyFormNo != ''">
+                and Supplyform.supplyFormNo like concat('%', #{supplyFormNo} ,'%')
+            </if>
+            <if test="purchaseDate != null and purchaseDate != ''">
+                and Supplyform.purchaseDate like concat('%', #{purchaseDate} ,'%')
+            </if>
+            <if test="purchaseManager != null and purchaseManager != ''">
+                and Supplyform.purchaseManager like concat('%', #{purchaseManager} ,'%')
+            </if>
+        </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hotelmanagesystem.mapper.EmployeeMapper">
+
+    <resultMap id="pageEmployee" type="com.example.hotelmanagesystem.entity.Employee">
+        <result column="empNo" property="empNo" />
+        <result column="empCardID" property="empCardID" />
+        <result column="memberName" property="memberName" />
+        <result column="memberSex" property="memberSex" />
+        <result column="hireTime" property="hireTime" />
+        <result column="empGrade" property="empGrade" />
+        <result column="empPostName" property="empPostName" />
+        <result column="empBirthday" property="empBirthday" />
+        <result column="empBankCardID" property="empBankCardID" />
+        <result column="empDepart" property="empDepart" />
+    </resultMap>
+
+    <select id="findPage" resultMap="pageEmployee">
+        select * from Employee
+        <where>
+            <if test="empNo != null and empNo != ''">
+                and Employee.empNo like concat('%', #{empNo} ,'%')
+            </if>
+            <if test="memberName != null and memberName != ''">
+                and Employee.memberName like concat('%', #{memberName} ,'%')
+            </if>
+            <if test="empPostName != null and empPostName != ''">
+                and Employee.empPostName like concat('%', #{empPostName} ,'%')
+            </if>
+        </where>
+    </select>
+
+    <delete id="removeByEmpNo">
+        delete from Employee where empNo = #{empNo}
+    </delete>
+
+    <delete id="removeByEmpNos">
+        DELETE FROM Employee
+        <where>
+            <if test="empNos!=null and empNos.size>0">
+                <foreach item="empNo" collection="empNos" open="empNo in(" separator="," close=")">
+                    #{empNo}
+                </foreach>
+            </if>
+        </where>
+    </delete>
+
+</mapper>

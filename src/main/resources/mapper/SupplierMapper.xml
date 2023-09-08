@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hotelmanagesystem.mapper.SupplierMapper">
+
+    <resultMap id="pageSupplier" type="com.example.hotelmanagesystem.entity.Supplier">
+        <result column="supplierNo" property="supplierNo" />
+        <result column="supplierName" property="supplierName" />
+        <result column="contactPersonName" property="contactPersonName" />
+        <result column="contactTelephone" property="contactTelephone" />
+        <result column="email" property="email" />
+        <result column="supplierPlace" property="supplierPlace" />
+        <result column="supplyGoodsList" property="supplyGoodsList" />
+        <result column="contractStartDate" property="contractStartDate" />
+        <result column="contractOverDate" property="contractOverDate" />
+    </resultMap>
+
+    <delete id="removeBySupplierNo">
+        delete from Supplier where supplierNo = #{supplierNo}
+    </delete>
+
+    <delete id="removeBySupplierNos">
+        DELETE FROM Supplier
+        <where>
+            <if test="supplierNos!=null and supplierNos.size>0">
+                <foreach item="supplierNo" collection="supplierNos" open="supplierNo in(" separator="," close=")">
+                    #{supplierNo}
+                </foreach>
+            </if>
+        </where>
+    </delete>
+
+    <select id="findPage" resultMap="pageSupplier">
+        select * from Supplier
+        <where>
+            <if test="supplierNo != null and supplierNo != ''">
+                and supplier.supplierNo like concat('%', #{supplierNo} ,'%')
+            </if>
+            <if test="supplierName != null and supplierName != ''">
+                and supplier.supplierName like concat('%', #{supplierName} ,'%')
+            </if>
+            <if test="contactPersonName != null and contactPersonName != ''">
+                and supplier.contactPersonName like concat('%', #{contactPersonName} ,'%')
+            </if>
+        </where>
+    </select>
+
+</mapper>

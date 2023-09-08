@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hotelmanagesystem.mapper.MaterialwastageformMapper">
+
+    <resultMap id="pageMaterialWastageForm" type="com.example.hotelmanagesystem.entity.Materialwastageform">
+        <result column="materialWastageFormNo" property="materialWastageFormNo" />
+        <result column="lossGoods" property="lossGoods" />
+        <result column="lossQuantity" property="lossQuantity" />
+        <result column="lossDate" property="lossDate" />
+        <result column="lossType" property="lossType" />
+        <result column="note" property="note" />
+    </resultMap>
+
+    <delete id="removeByMaterialWastageFormNo">
+        delete from Materialwastageform where materialWastageFormNo = #{materialWastageFormNo}
+    </delete>
+
+    <delete id="removeByMaterialWastageFormNos">
+        DELETE FROM Materialwastageform
+        <where>
+            <if test="materialWastageFormNos!=null and materialWastageFormNos.size>0">
+                <foreach item="materialWastageFormNo" collection="materialWastageFormNos" open="materialWastageFormNo in(" separator="," close=")">
+                    #{materialWastageFormNo}
+                </foreach>
+            </if>
+        </where>
+    </delete>
+
+    <select id="findPage" resultMap="pageMaterialWastageForm">
+        select * from Materialwastageform
+        <where>
+            <if test="materialWastageFormNo != null and materialWastageFormNo != ''">
+                and Materialwastageform.materialWastageFormNo like concat('%', #{materialWastageFormNo} ,'%')
+            </if>
+            <if test="lossGoods != null and lossGoods != ''">
+                and Materialwastageform.lossGoods like concat('%', #{lossGoods} ,'%')
+            </if>
+            <if test="lossDate != null and lossDate != ''">
+                and Materialwastageform.lossDate like concat('%', #{lossDate} ,'%')
+            </if>
+        </where>
+    </select>
+
+</mapper>

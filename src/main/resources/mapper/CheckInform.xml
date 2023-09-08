@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hotelmanagesystem.mapper.CheckinformMapper">
+
+    <resultMap id="pageCheckInform" type="com.example.hotelmanagesystem.entity.Checkinform">
+        <result column="checkInFormNo" property="checkInFormNo" />
+        <result column="memberNo" property="memberNo" />
+        <result column="memberCardID" property="memberCardID" />
+        <result column="roomNo" property="roomNo" />
+        <result column="livingPersonNum" property="livingPersonNum" />
+        <result column="comingTime" property="comingTime" />
+        <result column="leaveTime" property="leaveTime" />
+        <result column="roomAmount" property="roomAmount" />
+        <result column="isFirst" property="isFirst" />
+        <result column="state" property="state" />
+    </resultMap>
+
+    <delete id="removeByCheckInFormNo">
+        delete from Checkinform where checkInFormNo = #{checkInFormNo}
+    </delete>
+
+    <delete id="removeByCheckInFormNos">
+        DELETE FROM Checkinform
+        <where>
+            <if test="checkInFormNos!=null and checkInFormNos.size>0">
+                <foreach item="checkInFormNo" collection="checkInFormNos" open="checkInFormNo in(" separator="," close=")">
+                    #{checkInFormNo}
+                </foreach>
+            </if>
+        </where>
+    </delete>
+
+    <select id="findPage" resultMap="pageCheckInform">
+        select * from Checkinform
+        <where>
+            <if test="checkInFormNo != null and checkInFormNo != ''">
+                and Checkinform.checkInFormNo like concat('%', #{checkInFormNo} ,'%')
+            </if>
+            <if test="memberNo != null and memberNo != ''">
+                and Checkinform.memberNo like concat('%', #{memberNo} ,'%')
+            </if>
+            <if test="state != null and state != ''">
+                and Checkinform.state like concat('%', #{state} ,'%')
+            </if>
+        </where>
+    </select>
+
+</mapper>

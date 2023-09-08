@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hotelmanagesystem.mapper.DepartmentMapper">
+
+    <resultMap id="pageDepartment" type="com.example.hotelmanagesystem.entity.Department">
+        <result column="deptNo" property="deptNo" />
+        <result column="deptName" property="deptName" />
+        <result column="deptManager" property="deptManager" />
+        <result column="deptTelephone" property="deptTelephone" />
+        <result column="deptEmpNum" property="deptEmpNum" />
+        <result column="deptDescription" property="deptDescription" />
+    </resultMap>
+
+    <select id="findPage" resultMap="pageDepartment">
+        select * from Department
+        <where>
+            <if test="deptNo != null and deptNo != ''">
+                and department.deptNo like concat('%', #{deptNo} ,'%')
+            </if>
+            <if test="deptName != null and deptName != ''">
+                and department.deptName like concat('%', #{deptName} ,'%')
+            </if>
+            <if test="deptManager != null and deptManager != ''">
+                and department.deptManager like concat('%', #{deptManager} ,'%')
+            </if>
+        </where>
+    </select>
+
+    <delete id="removeByDeptNo">
+        delete from Department where deptNo = #{deptNo}
+    </delete>
+
+    <delete id="removeByDeptNos">
+        DELETE FROM Department
+        <where>
+            <if test="deptNos!=null and deptNos.size>0">
+                <foreach item="deptNo" collection="deptNos" open="deptNo in(" separator="," close=")">
+                    #{deptNo}
+                </foreach>
+            </if>
+        </where>
+    </delete>
+
+</mapper>
